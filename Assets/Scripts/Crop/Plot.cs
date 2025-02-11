@@ -1,4 +1,9 @@
+using System.Linq;
+
 using UnityEngine;
+
+using Items;
+using System.Collections.Generic;
 
 namespace Crops {
     public class Plot : MonoBehaviour {
@@ -18,6 +23,16 @@ namespace Crops {
                 slot.HydrationDrainTick();
                 slot.GrowthTick(deltaTime);
             }
+        }
+
+        public List<Item> Harvest() {
+            List<Item> items = new List<Item>();
+            foreach (CropSlot slot in _slots) {
+                if (slot.TryGetHarvest(out Item harvest)) {
+                    items.Add(harvest);
+                }
+            }
+            return items;
         }
     }
 }
