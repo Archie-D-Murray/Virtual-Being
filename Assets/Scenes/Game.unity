@@ -353,7 +353,7 @@ GameObject:
   - component: {fileID: 811109590}
   - component: {fileID: 811109589}
   m_Layer: 0
-  m_Name: GrowthManager
+  m_Name: Growth Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -376,9 +376,25 @@ MonoBehaviour:
   GrowthStages:
     Wheat:
     - GrowthProgress: 0
-      SpriteFrame: {fileID: 0}
-    Carrot: []
-    Leek: []
+      SpriteFrame: {fileID: 190130573, guid: 7e48f7843e927cda0a8bf59135077fa8, type: 3}
+    - GrowthProgress: 0.5
+      SpriteFrame: {fileID: -416023056, guid: 7e48f7843e927cda0a8bf59135077fa8, type: 3}
+    - GrowthProgress: 1
+      SpriteFrame: {fileID: -1947945346, guid: 7e48f7843e927cda0a8bf59135077fa8, type: 3}
+    Carrot:
+    - GrowthProgress: 0
+      SpriteFrame: {fileID: 2027181848, guid: c5890689a8c72138097ff940e700147f, type: 3}
+    - GrowthProgress: 0.5
+      SpriteFrame: {fileID: -1605713234, guid: c5890689a8c72138097ff940e700147f, type: 3}
+    - GrowthProgress: 1
+      SpriteFrame: {fileID: 66861450, guid: c5890689a8c72138097ff940e700147f, type: 3}
+    Leek:
+    - GrowthProgress: 0
+      SpriteFrame: {fileID: 1898600093, guid: 6c937e345f22ea09193d90dfdeb9ba2b, type: 3}
+    - GrowthProgress: 0.5
+      SpriteFrame: {fileID: 1604112680, guid: 6c937e345f22ea09193d90dfdeb9ba2b, type: 3}
+    - GrowthProgress: 1
+      SpriteFrame: {fileID: 1460558969, guid: 6c937e345f22ea09193d90dfdeb9ba2b, type: 3}
 --- !u!4 &811109590
 Transform:
   m_ObjectHideFlags: 0
