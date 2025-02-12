@@ -33,10 +33,12 @@ namespace Crops {
             }
         }
 
-        public void SetCrop(Plot plot) {
+        public void SetPlot(Plot plot) {
             _plot = plot;
             _state = CropState.Growing;
             _hydration = _crop.HydrationMax;
+            _growthTimer.Reset(_crop.GrowthTime);
+            _cropRenderer.sprite = GrowthManager.Instance.GetGrowthSprite(_crop.YieldType, 0f);
         }
 
         public void HydrationDrainTick() {

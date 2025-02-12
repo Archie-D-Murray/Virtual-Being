@@ -4,6 +4,7 @@ using UnityEngine;
 
 using Items;
 using System.Collections.Generic;
+using Farms;
 
 namespace Crops {
     public class Plot : MonoBehaviour {
@@ -12,6 +13,10 @@ namespace Crops {
 
         private void Start() {
             _slots = GetComponentsInChildren<CropSlot>();
+            foreach (CropSlot slot in _slots) {
+                slot.SetPlot(this);
+            }
+            Farm.Instance.CropUpdate.TickLoop += UpdateCrops;
         }
 
         public Crop GetCrop() {
