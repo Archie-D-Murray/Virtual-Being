@@ -22,18 +22,28 @@ namespace Crops {
         private Crop _crop => _plot.GetCrop();
 
         private void Start() {
+            if (!_cropRenderer) {
+                GetRenderers();
+            }
+            Debug.Log($"Plot: {_plotRenderer.name}, Crop: {_cropRenderer.name}, Weed: {_weedRenderer.name}");
+        }
+
+        private void GetRenderers() {
             foreach (SpriteRenderer renderer in GetComponentsInChildren<SpriteRenderer>(true)) {
                 if (renderer.gameObject.HasComponent<PlotTag>()) {
                     _plotRenderer = renderer;
                 } else if (renderer.gameObject.HasComponent<CropTag>()) {
                     _cropRenderer = renderer;
-                } else {
+                } else if (renderer.gameObject.HasComponent<WeedTag>()) {
                     _weedRenderer = renderer;
                 }
             }
         }
 
         public void SetPlot(Plot plot) {
+            if (!_cropRenderer) {
+                GetRenderers();
+            }
             _plot = plot;
             _state = CropState.Growing;
             _hydration = _crop.HydrationMax;
@@ -68,6 +78,7 @@ namespace Crops {
                 _state = CropState.Growing;
                 _growthTimer.Reset();
                 _growthTimer.Start();
+                _cropRenderer.sprite = GrowthManager.Instance.GetGrowthSprite(_crop.YieldType, _growthTimer.Progress());
                 return true;
             } else {
                 harvest = null;

@@ -10,7 +10,7 @@ public class HarvestManager : MonoBehaviour {
 
     private void Start() {
         _inventory = GetComponent<Inventory>();
-        _cropLayer = 1 << LayerMask.NameToLayer("Crop");
+        _cropLayer = 1 << LayerMask.NameToLayer("Plot");
     }
 
     private void Update() {

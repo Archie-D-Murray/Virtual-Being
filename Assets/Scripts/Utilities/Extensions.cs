@@ -64,6 +64,22 @@ public static class Extensions {
         spriteRenderer.material = originalMaterial;
     }
 
+    public static void Fade(this SpriteRenderer renderer, Color colour, float time, MonoBehaviour monoBehaviour) {
+        monoBehaviour.StartCoroutine(Fade(renderer, colour, time));
+    }
+
+    private static IEnumerator Fade(SpriteRenderer renderer, Color colour, float time) {
+        CountDownTimer timer = new CountDownTimer(time);
+        timer.Start();
+        Color original = renderer.color;
+        while (timer.IsRunning) {
+            renderer.color = Color.Lerp(original, colour, timer.Progress());
+            timer.Update(Time.fixedDeltaTime);
+            yield return Yielders.WaitForFixedUpdate;
+        }
+        renderer.color = colour;
+    }
+
     public static void FadeCanvas(this CanvasGroup canvasGroup, float duration, bool fadeToTransparent, MonoBehaviour monoBehaviour) {
         monoBehaviour.StartCoroutine(CanvasFade(canvasGroup, duration, fadeToTransparent));
     }

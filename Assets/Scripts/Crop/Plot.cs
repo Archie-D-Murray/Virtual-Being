@@ -11,8 +11,11 @@ namespace Crops {
         [SerializeField] private Crop _crop;
         [SerializeField] private CropSlot[] _slots;
 
+        private SpriteRenderer _select;
+
         private void Start() {
             _slots = GetComponentsInChildren<CropSlot>();
+            _select = GetComponentInChildren<Tags.Crop.SelectTag>().GetComponent<SpriteRenderer>();
             foreach (CropSlot slot in _slots) {
                 slot.SetPlot(this);
             }
@@ -38,6 +41,14 @@ namespace Crops {
                 }
             }
             return items;
+        }
+
+        private void OnMouseEnter() {
+            _select.Fade(Color.white, 0.5f, this);
+        }
+
+        private void OnMouseExit() {
+            _select.Fade(Color.clear, 0.5f, this);
         }
     }
 }
