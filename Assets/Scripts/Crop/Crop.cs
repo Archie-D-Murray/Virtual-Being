@@ -4,7 +4,10 @@ using Items;
 
 namespace Crops {
 
-    public enum CropState { None, Growing, FullyGrown, Dehydrated, Dead }
+    public enum CropState {
+        None, Growing, FullyGrown, Dehydrated, Dead,
+        Weeds
+    }
 
     [CreateAssetMenu(menuName = "Crop")]
     public class Crop : ScriptableObject {
@@ -16,9 +19,12 @@ namespace Crops {
         public float HydrationThreshold = 0.5f;
         public float HydrationMax = 10f;
         public float HydrationDrain = 0.5f;
+        public float WeedTime = 10f;
+        public float WeedChance = 0.25f;
+        public Sprite Icon;
 
-        public Item GetYield() {
-            return new Item(YieldType, YieldAmount);
+        public Item GetYield(float multiplier) {
+            return new Item(YieldType, Mathf.RoundToInt(YieldAmount * multiplier));
         }
     }
 }

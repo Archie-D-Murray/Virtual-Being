@@ -20,3 +20,6 @@ MonoBehaviour:
   HydrationThreshold: 0.5
   HydrationMax: 10
   HydrationDrain: 0.1
+  WeedTime: 10
+  WeedChance: 0.25
+  Icon: {fileID: 1567079700, guid: 96ecf8574bb87554489e6d3c206e74ce, type: 3}

@@ -11,11 +11,12 @@ using Tags.Crop;
 
 namespace Crops {
     public class CropSlot : MonoBehaviour {
-
+        [SerializeField] private float _nonWeedTime = 0f;
         [SerializeField] private Plot _plot;
         [SerializeField] private float _hydration = 0.0f;
         [SerializeField] private CropState _state = CropState.None;
         [SerializeField] private CountDownTimer _growthTimer = new CountDownTimer(0f);
+        [SerializeField] private CountDownTimer _weedPreventionTimer = new CountDownTimer(5f);
         private SpriteRenderer _cropRenderer;
         private SpriteRenderer _plotRenderer;
         private SpriteRenderer _weedRenderer;
@@ -25,7 +26,6 @@ namespace Crops {
             if (!_cropRenderer) {
                 GetRenderers();
             }
-            Debug.Log($"Plot: {_plotRenderer.name}, Crop: {_cropRenderer.name}, Weed: {_weedRenderer.name}");
         }
 
         private void GetRenderers() {
@@ -72,9 +72,9 @@ namespace Crops {
             }
         }
 
-        public bool TryGetHarvest(out Item harvest) {
+        public bool TryGetHarvest(float multipler, out Item harvest) {
             if (_state == CropState.FullyGrown) {
-                harvest = _crop.GetYield();
+                harvest = _crop.GetYield(multipler);
                 _state = CropState.Growing;
                 _growthTimer.Reset();
                 _growthTimer.Start();
@@ -84,6 +84,27 @@ namespace Crops {
                 harvest = null;
                 return false;
             }
+        }
+
+        public void Hydrate(float waterAmount) {
+            _hydration = Mathf.Min(_hydration + waterAmount, _crop.HydrationMax);
+        }
+
+        public void WeedTick(float deltaTime) {
+            _weedPreventionTimer.Update(deltaTime);
+            if (_weedPreventionTimer.IsFinished) { return; }
+            _nonWeedTime += deltaTime;
+            if (_nonWeedTime >= _crop.WeedTime && UnityEngine.Random.value <= _crop.WeedChance) {
+                _state = CropState.Weeds;
+                _weedRenderer.color = Color.white;
+                _nonWeedTime = 0f;
+            }
+        }
+
+        public void Weed(float preventionTime) {
+            _weedPreventionTimer.Reset(preventionTime);
+            _weedRenderer.color = Color.clear;
+            _state = _growthTimer.IsFinished ? CropState.FullyGrown : CropState.Growing;
         }
     }
 }

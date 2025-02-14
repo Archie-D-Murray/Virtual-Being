@@ -1,12 +1,15 @@
 using UnityEngine;
 
 using System.Collections.Generic;
+using System;
 
 namespace Items {
     public class Inventory : MonoBehaviour {
         [SerializeField] private List<Item> _items = new List<Item>();
 
         private Dictionary<ItemType, int> _lookup = new Dictionary<ItemType, int>();
+
+        public Action OnItemChange;
 
         private void Start() {
             PopulateLookup();
@@ -44,6 +47,7 @@ namespace Items {
                     }
                     _lookup.Add(value.Type, i);
                 }
+                OnItemChange?.Invoke();
             }
 
         }
@@ -65,6 +69,7 @@ namespace Items {
                 }
                 _lookup.Add(item.Type, i);
             }
+            OnItemChange?.Invoke();
         }
     }
 }

@@ -61,7 +61,7 @@ namespace Utilities {
             }
         }
 
-        public override float Progress() => 1f - _time / _initialTime;
+        public override float Progress() => _initialTime != 0.0f ? 1f - _time / _initialTime : 1f;
     }
 
     [Serializable]

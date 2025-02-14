@@ -5,6 +5,7 @@ using UnityEngine;
 using Items;
 using System.Collections.Generic;
 using Farms;
+using System;
 
 namespace Crops {
     public class Plot : MonoBehaviour {
@@ -30,13 +31,14 @@ namespace Crops {
             foreach (CropSlot slot in _slots) {
                 slot.HydrationDrainTick();
                 slot.GrowthTick(deltaTime);
+                slot.WeedTick(deltaTime);
             }
         }
 
-        public List<Item> Harvest() {
+        public List<Item> Harvest(float multiplier) {
             List<Item> items = new List<Item>();
             foreach (CropSlot slot in _slots) {
-                if (slot.TryGetHarvest(out Item harvest)) {
+                if (slot.TryGetHarvest(multiplier, out Item harvest)) {
                     items.Add(harvest);
                 }
             }
@@ -49,6 +51,18 @@ namespace Crops {
 
         private void OnMouseExit() {
             _select.Fade(Color.clear, 0.5f, this);
+        }
+
+        public void Hydrate(float waterAmount) {
+            foreach (CropSlot slot in _slots) {
+                slot.Hydrate(waterAmount);
+            }
+        }
+
+        public void Weed(float preventionTime) {
+            foreach (CropSlot slot in _slots) {
+                slot.Weed(preventionTime);
+            }
         }
     }
 }
