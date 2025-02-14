@@ -58,7 +58,7 @@ namespace Crops {
             } else if (_hydration / _crop.HydrationMax <= _crop.HydrationThreshold) {
                 if (_state != CropState.Dehydrated) {
                     _state = CropState.Dehydrated;
-                    // TODO: Colour crop + soil to show dehydration
+                    _plotRenderer.sprite = GrowthManager.Instance.DehydratedSoil;
                 }
             }
         }
@@ -88,6 +88,18 @@ namespace Crops {
 
         public void Hydrate(float waterAmount) {
             _hydration = Mathf.Min(_hydration + waterAmount, _crop.HydrationMax);
+            if (_state == CropState.Dehydrated || _state == CropState.Dead) {
+                if (_hydration / _crop.HydrationMax >= _crop.HydrationThreshold) {
+                    _plotRenderer.sprite = GrowthManager.Instance.HydratedSoil;
+                    if (_state == CropState.Dead) {
+                        _growthTimer.Reset();
+                        _growthTimer.Start();
+                        _state = CropState.Growing;
+                    } else {
+                        _state = _growthTimer.IsFinished ? CropState.FullyGrown : CropState.Growing;
+                    }
+                }
+            }
         }
 
         public void WeedTick(float deltaTime) {
