@@ -3,12 +3,12 @@ using UnityEngine;
 using Items;
 using Utilities;
 using Crops;
+using Farms;
 
 namespace Interaction {
 
     public class HarvestManager : MonoBehaviour {
         private Inventory _inventory;
-        [SerializeField] private float _harvestMultiplier = 1f;
         [SerializeField] private LayerMask _cropLayer;
         [SerializeField] private float _harvestCooldown = 1f;
 
@@ -31,7 +31,7 @@ namespace Interaction {
                 RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.down, 1f, _cropLayer);
                 if (hit && hit.transform.TryGetComponent(out Plot plot)) {
                     _harvestTimer.Reset(_harvestCooldown);
-                    foreach (Item item in plot.Harvest(_harvestMultiplier)) {
+                    foreach (Item item in plot.Harvest(Farm.Instance.HarvestMultiplier)) {
                         _inventory.AddItem(item);
                     }
                 }

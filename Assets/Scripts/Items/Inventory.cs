@@ -6,10 +6,14 @@ using System;
 namespace Items {
     public class Inventory : MonoBehaviour {
         [SerializeField] private List<Item> _items = new List<Item>();
+        [SerializeField] private int _money = 0;
 
         private Dictionary<ItemType, int> _lookup = new Dictionary<ItemType, int>();
 
         public Action OnItemChange;
+        public Action<int> OnMoneyChange;
+
+        public int Money { get => _money; set { _money = value; OnMoneyChange?.Invoke(_money); } }
 
         private void Start() {
             PopulateLookup();

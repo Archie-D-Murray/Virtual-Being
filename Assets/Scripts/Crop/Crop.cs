@@ -14,7 +14,7 @@ namespace Crops {
         public string Name = "Crop";
         public ItemType YieldType = ItemType.Wheat;
         public int YieldAmount = 1;
-        public int ExperiencePerHarvest = 10;
+        public int Value = 10;
         public float GrowthTime = 5f;
         public float HydrationThreshold = 0.5f;
         public float HydrationMax = 10f;

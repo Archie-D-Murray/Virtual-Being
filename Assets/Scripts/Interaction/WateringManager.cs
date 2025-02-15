@@ -11,7 +11,6 @@ namespace Interaction {
         [SerializeField] private float _wateringCooldown = 1.5f;
 
         private CountDownTimer _waterTimer = new CountDownTimer(0f);
-        public float CooldownProgress => _waterTimer.Progress();
 
         private void Start() {
             _plotLayer = 1 << LayerMask.NameToLayer("Plot");

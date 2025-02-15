@@ -1,8 +1,21 @@
+using System.Collections.Generic;
+
+using Crops;
+
+using Items;
+
 using UnityEngine;
 
 using Utilities;
 
 public class AssetServer : Singleton<AssetServer> {
-    public GameObject EnemyDeath;
-    public Material FlashMaterial;
+    [SerializeField] private Crop[] _crops;
+
+    public Dictionary<ItemType, Crop> Crops = new Dictionary<ItemType, Crop>();
+
+    private void Start() {
+        foreach (Crop crop in _crops) {
+            Crops.Add(crop.YieldType, crop);
+        }
+    }
 }
