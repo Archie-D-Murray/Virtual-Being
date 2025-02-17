@@ -23,7 +23,7 @@ namespace Interaction {
             if (InteractionManager.Instance.CurrentInteractionType != InteractionType.Weed) {
                 return;
             }
-            if (Input.GetMouseButtonDown(1) && _weedingTimer.IsFinished) {
+            if ((Input.GetKeyDown(InteractionManager.Instance.InteractionKey) || Input.GetMouseButtonDown(1)) && _weedingTimer.IsFinished) {
                 RaycastHit2D hit = Physics2D.Raycast(Helpers.Instance.WorldMousePosition(), Vector2.down, 10f, _plotLayer);
                 if (hit && hit.transform.TryGetComponent(out Plot plot)) {
                     plot.Weed(_weedingPreventionTime);

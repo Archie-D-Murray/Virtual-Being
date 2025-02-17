@@ -26,7 +26,7 @@ namespace Interaction {
             if (InteractionManager.Instance.CurrentInteractionType != InteractionType.Harvest) {
                 return;
             }
-            if (Input.GetMouseButtonDown(1) && _harvestTimer.IsFinished) {
+            if ((Input.GetKeyDown(InteractionManager.Instance.InteractionKey) || Input.GetMouseButtonDown(1)) && _harvestTimer.IsFinished) {
                 Vector2 mousePosition = Helpers.Instance.WorldMousePosition();
                 RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.down, 1f, _cropLayer);
                 if (hit && hit.transform.TryGetComponent(out Plot plot)) {

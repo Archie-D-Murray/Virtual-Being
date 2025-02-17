@@ -16,6 +16,9 @@ namespace Interaction {
         [SerializeField] private Image _wateringIndicator;
         [SerializeField] private Image _weedingIndicator;
         [SerializeField] private CanvasGroup _interactionIndicatorCanvas;
+        [SerializeField] private KeyCode _interactionKey = KeyCode.E;
+
+        public KeyCode InteractionKey => _interactionKey;
 
         private void Start() {
             foreach (Image image in _interactionIndicatorCanvas.GetComponentsInChildren<Image>(true).Where(image => image.transform.parent != _interactionIndicatorCanvas)) {
