@@ -62,6 +62,7 @@ namespace UI {
                 Destroy(uiPopup);
                 _issues.Remove((plot, issue));
             }
+            UpdateBeing();
         }
 
         private void UpdateBeing() {

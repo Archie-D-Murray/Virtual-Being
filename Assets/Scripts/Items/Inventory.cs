@@ -37,6 +37,7 @@ namespace Items {
             set {
                 if (_lookup.ContainsKey(value.Type)) {
                     _items[_lookup[value.Type]].Count += value.Count;
+                    OnItemChange?.Invoke();
                 } else {
                     int i = 0;
                     while (i < _items.Count) {
@@ -74,6 +75,15 @@ namespace Items {
                 _lookup.Add(item.Type, i);
             }
             OnItemChange?.Invoke();
+        }
+
+        public void Remove(ItemType type, int count) {
+            if (!_lookup.TryGetValue(type, out int index)) {
+                return;
+            } else {
+                _items[index].Count = Mathf.Max(0, _items[index].Count - count);
+                OnItemChange?.Invoke();
+            }
         }
     }
 }

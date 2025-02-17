@@ -6,7 +6,6 @@ using Utilities;
 
 namespace Interaction {
     public class WateringManager : MonoBehaviour {
-        [SerializeField] private float _waterAmount = 20f;
         [SerializeField] private LayerMask _plotLayer;
         [SerializeField] private float _wateringCooldown = 1.5f;
 
@@ -14,6 +13,13 @@ namespace Interaction {
 
         private void Start() {
             _plotLayer = 1 << LayerMask.NameToLayer("Plot");
+        }
+
+        ///
+        ///<param name="amount">Amount to reduce cooldown by (should be negative)</param>
+        ///
+        public void ReduceWaterCooldown(float amount) {
+            _wateringCooldown = Mathf.Max(0.1f, _wateringCooldown + amount);
         }
 
         private void Update() {
@@ -25,7 +31,7 @@ namespace Interaction {
             if ((Input.GetKeyDown(InteractionManager.Instance.InteractionKey) || Input.GetMouseButtonDown(1)) && _waterTimer.IsFinished) {
                 RaycastHit2D hit = Physics2D.Raycast(Helpers.Instance.WorldMousePosition(), Vector2.down, 10f, _plotLayer);
                 if (hit && hit.transform.TryGetComponent(out Plot plot)) {
-                    plot.Hydrate(_waterAmount);
+                    plot.Hydrate();
                     _waterTimer.Reset(_wateringCooldown);
                 }
             }

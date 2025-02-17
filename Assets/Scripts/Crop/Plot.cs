@@ -53,19 +53,25 @@ namespace Crops {
         }
 
         private void OnMouseEnter() {
+            if (!_isActive) {
+                return;
+            }
             _select.Fade(Color.white, 0.5f, this);
         }
 
         private void OnMouseExit() {
+            if (!_isActive) {
+                return;
+            }
             _select.Fade(Color.clear, 0.5f, this);
         }
 
-        public void Hydrate(float waterAmount) {
+        public void Hydrate() {
             if (!_isActive) {
                 return;
             }
             foreach (CropSlot slot in _slots) {
-                slot.Hydrate(waterAmount, this);
+                slot.Hydrate(this);
             }
         }
 
@@ -79,7 +85,7 @@ namespace Crops {
         }
 
         public void Enable() {
-            _isActive = false;
+            _isActive = true;
         }
     }
 }

@@ -31,8 +31,10 @@ namespace UI {
             foreach (Crop crop in AssetServer.Instance.Crops.Values) {
                 GameObject sellSlot = Instantiate(_cropPrefab, _shopCanvas.transform);
                 TMP_InputField input = sellSlot.GetComponentInChildren<TMP_InputField>();
+                Button button = sellSlot.GetComponentInChildren<Button>();
                 _slots.Add(crop.YieldType, (input, sellSlot.GetComponentsInChildren<TMP_Text>().First(text => text.gameObject.HasComponent<ReadoutTag>())));
                 input.onSubmit.AddListener((string value) => UpdateReadout(_slots[crop.YieldType].input, _slots[crop.YieldType].money, crop.YieldType, value));
+                button.onClick.AddListener(() => UpdateReadout(_slots[crop.YieldType].input, _slots[crop.YieldType].money, crop.YieldType));
                 sellSlot.GetComponentsInChildren<Image>().First(image => image.gameObject.HasComponent<IconTag>()).sprite = crop.Icon;
             }
             _sell.onClick.AddListener(SellAll);
@@ -41,6 +43,7 @@ namespace UI {
         private void SellAll() {
             foreach (KeyValuePair<ItemType, int> kvp in _sellData) {
                 _inventory.Money += AssetServer.Instance.Crops[kvp.Key].Value * kvp.Value;
+                _inventory.Remove(kvp.Key, kvp.Value);
             }
             _sellData.Clear();
             foreach ((TMP_InputField input, TMP_Text money) value in _slots.Values) {
@@ -51,6 +54,16 @@ namespace UI {
 
         private void UpdateReadout(TMP_InputField input, TMP_Text money, ItemType type, string sellString) {
             int sellAmount = Mathf.Clamp(int.Parse(sellString), 0, _inventory[type]?.Count ?? 0);
+            input.SetTextWithoutNotify(sellAmount.ToString());
+            money.text = (AssetServer.Instance.Crops[type].Value * sellAmount).ToString();
+            if (sellAmount > 0) {
+                _sellData[type] = sellAmount;
+            }
+        }
+
+        private void UpdateReadout(TMP_InputField input, TMP_Text money, ItemType type) {
+            int sellAmount = _inventory[type]?.Count ?? 0;
+            input.SetTextWithoutNotify(sellAmount.ToString());
             money.text = (AssetServer.Instance.Crops[type].Value * sellAmount).ToString();
             if (sellAmount > 0) {
                 _sellData[type] = sellAmount;

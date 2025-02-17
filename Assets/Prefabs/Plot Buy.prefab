@@ -70,8 +70,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4af1a07d62bcd27408bc359b8db40194, type: 2}
+  m_sharedMaterial: {fileID: 134643110814111535, guid: 4af1a07d62bcd27408bc359b8db40194, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -175,7 +175,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 7.075012, y: -2.5371704}
+  m_AnchoredPosition: {x: 7.074951, y: -2.5371704}
   m_SizeDelta: {x: -15.1782, y: -6.5497}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4883813841941850911
@@ -199,8 +199,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -279,7 +279,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.69219995, y: 0}
+  m_AnchoredPosition: {x: -0.69226074, y: 0}
   m_SizeDelta: {x: -1.3844, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3665716121471069495
@@ -332,6 +332,8 @@ GameObject:
   - component: {fileID: 4900455706233737794}
   - component: {fileID: 4683914838309489113}
   - component: {fileID: 6858464732245291681}
+  - component: {fileID: 7458709246525850550}
+  - component: {fileID: 1564747383074184460}
   m_Layer: 5
   m_Name: Buy
   m_TagString: Untagged
@@ -443,3 +445,33 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7458709246525850550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7997272613700807795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45f4a3504f7f5854892e7633437fb94a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effects:
+  - Clip: {fileID: 8300000, guid: 574998cf5134ccf4fbdb8e50f50f35e8, type: 3}
+    Type: 3
+  - Clip: {fileID: 8300000, guid: bec9ab16d46cc364f91f991eda7ecb05, type: 3}
+    Type: 4
+--- !u!114 &1564747383074184460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7997272613700807795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f05df0b9ddeed214cb73c35f40bcd78a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  emitter: {fileID: 0}

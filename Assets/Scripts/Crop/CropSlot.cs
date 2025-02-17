@@ -87,18 +87,16 @@ namespace Crops {
             }
         }
 
-        public void Hydrate(float waterAmount, Plot plot) {
-            _hydration = Mathf.Min(_hydration + waterAmount, _crop.HydrationMax);
-            if (_state == CropState.Dehydrated || _state == CropState.Dead) {
-                _plotRenderer.sprite = GrowthManager.Instance.HydratedSoil;
-                if (_state == CropState.Dead) {
-                    _growthTimer.Reset();
-                    _growthTimer.Start();
-                    GrowthManager.Instance.FarmBeing.ResolveIssue(plot, IssueType.Dead);
-                    GrowthManager.Instance.FarmBeing.ResolveIssue(plot, IssueType.Dehydration);
-                } else {
-                    GrowthManager.Instance.FarmBeing.ResolveIssue(plot, IssueType.Dehydration);
-                }
+        public void Hydrate(Plot plot) {
+            _hydration = _crop.HydrationMax;
+            _plotRenderer.sprite = GrowthManager.Instance.HydratedSoil;
+            if (_state == CropState.Dead) {
+                _growthTimer.Reset();
+                _growthTimer.Start();
+                GrowthManager.Instance.FarmBeing.ResolveIssue(plot, IssueType.Dead);
+                GrowthManager.Instance.FarmBeing.ResolveIssue(plot, IssueType.Dehydration);
+            } else {
+                GrowthManager.Instance.FarmBeing.ResolveIssue(plot, IssueType.Dehydration);
             }
             _state = GetGrowthState();
         }

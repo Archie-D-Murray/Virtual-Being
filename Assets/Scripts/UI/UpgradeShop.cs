@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 using Farms;
 
+using Interaction;
+
 using Items;
 
 using Tags.UI;
@@ -10,6 +12,7 @@ using Tags.UI;
 using TMPro;
 
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI {
@@ -45,10 +48,12 @@ namespace UI {
         public Action OnUpgradeApply;
 
         private Inventory _inventory;
+        private FarmUI _farmUI;
         private Dictionary<UpgradeType, int> _lookups = new Dictionary<UpgradeType, int>();
 
         private void Start() {
             _inventory = FindFirstObjectByType<Inventory>();
+            _farmUI = FindFirstObjectByType<FarmUI>();
             _inventory.OnMoneyChange += UpdateUpgrades;
             for (int i = 0; i < _upgrades.Length; i++) {
                 Upgrade upgrade = _upgrades[i];
@@ -67,15 +72,15 @@ namespace UI {
                 upgrade.Button = button;
                 foreach (TMP_Text text in instance.GetComponentsInChildren<TMP_Text>()) {
                     if (text.gameObject.HasComponent<ReadoutTag>()) {
-                        upgrade.Price = text;
-                    } else if (text.gameObject.HasComponent<PriceTag>()) {
                         upgrade.Readout = text;
-                        upgrade.Readout.text = DEFAULT_VALUE;
+                        upgrade.Readout.text = "100%";
+                    } else if (text.gameObject.HasComponent<PriceTag>()) {
+                        upgrade.Price = text;
+                        upgrade.Price.text = upgrade.BaseCost.ToString();
                     } else {
                         text.text = upgrade.Description;
                     }
                 }
-                upgrade.Readout.text = upgrade.BaseCost.ToString();
                 button.onClick.AddListener(() => Buy(upgrade));
                 button.interactable = false;
             }
@@ -86,6 +91,7 @@ namespace UI {
             switch (upgrade.Type) {
                 case UpgradeType.HydrationDrain:
                     Farm.Instance.HydrationDrainMultiplier += upgrade.Multiplier;
+                    InteractionManager.Instance.WateringManager.ReduceWaterCooldown(0.1f * upgrade.Multiplier);
                     upgrade.Readout.text = Farm.Instance.HydrationDrainMultiplier.ToString("0%");
                     break;
                 case UpgradeType.HarvestAmount:
@@ -96,18 +102,21 @@ namespace UI {
             upgrade.CurrentUpgrades++;
             OnUpgradeApply?.Invoke();
             upgrade.Progress.fillAmount = (float)upgrade.CurrentUpgrades / (float)upgrade.MaxUpgrades;
-            if (upgrade.CurrentUpgrades < upgrade.MaxUpgrades) {
+            if (upgrade.CurrentUpgrades != upgrade.MaxUpgrades) {
                 upgrade.Price.text = upgrade.Cost.ToString();
             } else {
                 upgrade.Price.text = MAX_UPGRADES;
                 upgrade.Button.interactable = false;
+                EventSystem.current.SetSelectedGameObject(null);
+                _farmUI.FinishedUpgrade();
             }
+            UpdateUpgrades(_inventory.Money);
         }
 
         private void UpdateUpgrades(int money) {
             Debug.Log("Updated upgrades");
             foreach (Upgrade upgrade in _upgrades) {
-                upgrade.Button.interactable = money > upgrade.Cost || upgrade.CurrentUpgrades == upgrade.MaxUpgrades;
+                upgrade.Button.interactable = money >= upgrade.Cost && upgrade.CurrentUpgrades < upgrade.MaxUpgrades;
             }
         }
     }

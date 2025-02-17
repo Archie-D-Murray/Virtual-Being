@@ -84,7 +84,7 @@ public static class Extensions {
         monoBehaviour.StartCoroutine(CanvasFade(canvasGroup, duration, fadeToTransparent));
     }
 
-    private static IEnumerator CanvasFade(CanvasGroup canvasGroup, float duration, bool fadeToTransparent) {
+    private static IEnumerator CanvasFade(CanvasGroup canvasGroup, float duration, bool fadeToTransparent, bool disableRaycast = true) {
         CountDownTimer timer = new CountDownTimer(duration);
         timer.Start();
         while (timer.IsRunning) {
@@ -95,9 +95,13 @@ public static class Extensions {
         if (fadeToTransparent) {
             canvasGroup.interactable = false;
             canvasGroup.alpha = 0f;
+            canvasGroup.blocksRaycasts = false;
         } else {
             canvasGroup.interactable = true;
             canvasGroup.alpha = 1f;
+            if (disableRaycast) {
+                canvasGroup.blocksRaycasts = true;
+            }
         }
     }
 

@@ -17,10 +17,13 @@ namespace Interaction {
         [SerializeField] private Image _weedingIndicator;
         [SerializeField] private CanvasGroup _interactionIndicatorCanvas;
         [SerializeField] private KeyCode _interactionKey = KeyCode.E;
+        [SerializeField] private WateringManager _wateringManager;
 
         public KeyCode InteractionKey => _interactionKey;
+        public WateringManager WateringManager => _wateringManager;
 
         private void Start() {
+            _wateringManager = FindFirstObjectByType<WateringManager>();
             foreach (Image image in _interactionIndicatorCanvas.GetComponentsInChildren<Image>(true).Where(image => image.transform.parent != _interactionIndicatorCanvas)) {
                 if (image.gameObject.HasComponent<HarvestIndicator>()) {
                     _harvestIndicator = image;

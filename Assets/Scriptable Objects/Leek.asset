@@ -15,11 +15,11 @@ MonoBehaviour:
   Name: Crop
   YieldType: 2
   YieldAmount: 1
-  ExperiencePerHarvest: 10
+  Value: 10
   GrowthTime: 5
   HydrationThreshold: 0.5
   HydrationMax: 10
   HydrationDrain: 0.5
-  WeedTime: 10
-  WeedChance: 0.25
+  WeedTime: 1
+  WeedChance: 1
   Icon: {fileID: 1941012016, guid: 96ecf8574bb87554489e6d3c206e74ce, type: 3}
