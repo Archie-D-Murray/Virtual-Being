@@ -11,6 +11,7 @@ namespace Crops {
     public class Plot : MonoBehaviour {
         [SerializeField] private Crop _crop;
         [SerializeField] private CropSlot[] _slots;
+        [SerializeField] private bool _isActive;
 
         private SpriteRenderer _select;
 
@@ -28,15 +29,21 @@ namespace Crops {
         }
 
         public void UpdateCrops(float deltaTime) {
+            if (!_isActive) {
+                return;
+            }
             foreach (CropSlot slot in _slots) {
-                slot.HydrationDrainTick();
-                slot.GrowthTick(deltaTime);
-                slot.WeedTick(deltaTime);
+                slot.HydrationDrainTick(this);
+                slot.GrowthTick(deltaTime, this);
+                slot.WeedTick(deltaTime, this);
             }
         }
 
         public List<Item> Harvest(float multiplier) {
             List<Item> items = new List<Item>();
+            if (!_isActive) {
+                return items;
+            }
             foreach (CropSlot slot in _slots) {
                 if (slot.TryGetHarvest(multiplier, out Item harvest)) {
                     items.Add(harvest);
@@ -54,15 +61,25 @@ namespace Crops {
         }
 
         public void Hydrate(float waterAmount) {
+            if (!_isActive) {
+                return;
+            }
             foreach (CropSlot slot in _slots) {
-                slot.Hydrate(waterAmount);
+                slot.Hydrate(waterAmount, this);
             }
         }
 
         public void Weed(float preventionTime) {
-            foreach (CropSlot slot in _slots) {
-                slot.Weed(preventionTime);
+            if (!_isActive) {
+                return;
             }
+            foreach (CropSlot slot in _slots) {
+                slot.Weed(preventionTime, this);
+            }
+        }
+
+        public void Enable() {
+            _isActive = false;
         }
     }
 }

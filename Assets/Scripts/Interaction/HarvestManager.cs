@@ -16,7 +16,7 @@ namespace Interaction {
         public float CooldownProgress => _harvestTimer.Progress();
 
         private void Start() {
-            _inventory = GetComponent<Inventory>();
+            _inventory = Farm.Instance.Inventory;
             _cropLayer = 1 << LayerMask.NameToLayer("Plot");
         }
 

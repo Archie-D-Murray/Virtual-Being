@@ -13,7 +13,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI {
-    public enum UpgradeType { GrowthTime, HarvestAmount }
+    public enum UpgradeType { HydrationDrain, HarvestAmount }
     [Serializable]
     public class Upgrade {
         public UpgradeType Type;
@@ -23,20 +23,26 @@ namespace UI {
         public int BaseCost = 100;
         public float IncreasePerLevel = 0.5f;
         public Sprite Icon;
+        public String Description;
 
         // [HideInInspector]
         public Button Button;
         public Image Progress;
-        public TMP_Text Text;
+        public TMP_Text Readout;
+        public TMP_Text Price;
 
         public int Cost => Mathf.RoundToInt(BaseCost * (1f + CurrentUpgrades * IncreasePerLevel));
     }
 
     public class UpgradeShop : MonoBehaviour {
-        private const string ZERO = "0";
+        private const string MAX_UPGRADES = "Max Upgrades";
+        private const string DEFAULT_VALUE = "100%";
         [SerializeField] private CanvasGroup _upgradeCanvas;
         [SerializeField] private GameObject _upgradePrefab;
         [SerializeField] private Upgrade[] _upgrades = new Upgrade[2];
+
+        public Upgrade[] Upgrades => _upgrades;
+        public Action OnUpgradeApply;
 
         private Inventory _inventory;
         private Dictionary<UpgradeType, int> _lookups = new Dictionary<UpgradeType, int>();
@@ -59,8 +65,17 @@ namespace UI {
                 }
                 Button button = instance.GetComponentInChildren<Button>();
                 upgrade.Button = button;
-                upgrade.Text = button.GetComponentInChildren<TMP_Text>();
-                upgrade.Text.text = upgrade.BaseCost.ToString();
+                foreach (TMP_Text text in instance.GetComponentsInChildren<TMP_Text>()) {
+                    if (text.gameObject.HasComponent<ReadoutTag>()) {
+                        upgrade.Price = text;
+                    } else if (text.gameObject.HasComponent<PriceTag>()) {
+                        upgrade.Readout = text;
+                        upgrade.Readout.text = DEFAULT_VALUE;
+                    } else {
+                        text.text = upgrade.Description;
+                    }
+                }
+                upgrade.Readout.text = upgrade.BaseCost.ToString();
                 button.onClick.AddListener(() => Buy(upgrade));
                 button.interactable = false;
             }
@@ -69,19 +84,23 @@ namespace UI {
         private void Buy(Upgrade upgrade) {
             _inventory.Money -= upgrade.Cost;
             switch (upgrade.Type) {
-                case UpgradeType.GrowthTime:
-                    Farm.Instance.GrowthSpeedMultiplier += upgrade.Multiplier;
+                case UpgradeType.HydrationDrain:
+                    Farm.Instance.HydrationDrainMultiplier += upgrade.Multiplier;
+                    upgrade.Readout.text = Farm.Instance.HydrationDrainMultiplier.ToString("0%");
                     break;
                 case UpgradeType.HarvestAmount:
                     Farm.Instance.HarvestMultiplier += upgrade.Multiplier;
+                    upgrade.Readout.text = Farm.Instance.HarvestMultiplier.ToString("0%");
                     break;
             }
             upgrade.CurrentUpgrades++;
+            OnUpgradeApply?.Invoke();
             upgrade.Progress.fillAmount = (float)upgrade.CurrentUpgrades / (float)upgrade.MaxUpgrades;
             if (upgrade.CurrentUpgrades < upgrade.MaxUpgrades) {
-                upgrade.Text.text = upgrade.Cost.ToString();
+                upgrade.Price.text = upgrade.Cost.ToString();
             } else {
-                upgrade.Text.text = ZERO;
+                upgrade.Price.text = MAX_UPGRADES;
+                upgrade.Button.interactable = false;
             }
         }
 

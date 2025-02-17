@@ -4,6 +4,7 @@ using Utilities;
 using Items;
 using System;
 using System.Linq;
+using UI;
 
 namespace Crops {
 
@@ -35,6 +36,11 @@ namespace Crops {
         public Sprite HydratedSoil;
         public Sprite DehydratedSoil;
         public CropGrowthStages GrowthStages;
+        public FarmBeing FarmBeing;
+
+        private void Start() {
+            FarmBeing = FindFirstObjectByType<FarmBeing>();
+        }
 
         public Sprite GetGrowthSprite(ItemType type, float growthProgress) {
             foreach (CropGrowthStage stage in GrowthStages.GetGrowthStage(type).Reverse()) {
